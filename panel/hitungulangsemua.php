@@ -6,11 +6,10 @@ require("../config/functions.crud.php");
 
 $id_mapel = $_GET['id'];
 
-$hasil = mysqli_query($koneksi, "select * from nilai where id_mapel = ".$id_mapel);
+$hasil = mysqli_query($koneksi, "select * from nilai where id_mapel = " . $id_mapel);
 
-while ($siswa = mysqli_fetch_array($hasil))
-{
-	$idnilai =  $siswa['id_nilai'];
+while ($siswa = mysqli_fetch_array($hasil)) {
+    $idnilai =  $siswa['id_nilai'];
     $nilai = fetch($koneksi, 'nilai', array('id_nilai' => $idnilai));
     $idm = $nilai['id_mapel'];
     $ids = $nilai['id_siswa'];
@@ -29,6 +28,8 @@ while ($siswa = mysqli_fetch_array($hasil))
 
     $arrayjawabesai = array();
     foreach ($ceksoalesai as $getsoalesai) {
+        // print_r($ceksoalesai);
+        // die();
         $w2 = array(
             'id_siswa' => $ids,
             'id_mapel' => $idm,
@@ -47,7 +48,11 @@ while ($siswa = mysqli_fetch_array($hasil))
         }
     }
     $arrayjawab = array();
+    $skor = 0;
     foreach ($ceksoal as $getsoal) {
+        // echo "<pre>";
+        // print_r($getsoal);
+        // die();
         $w = array(
             'id_siswa' => $ids,
             'id_mapel' => $idm,
@@ -55,16 +60,45 @@ while ($siswa = mysqli_fetch_array($hasil))
             'jenis' => 1
         );
         $getjwb = fetch($koneksi, 'jawaban', $w);
+        // echo "<pre>";
+        // print_r($getjwb);
+        // die();
         if ($getjwb) {
             $arrayjawab[$getsoal['id_soal']] = $getjwb['jawaban'];
         } else {
             $arrayjawab[$getsoal['id_soal']] = 'X';
         }
-        ($getjwb['jawaban'] == $getsoal['jawaban']) ? $benar++ : $salah++;
+        // ($getjwb['jawaban'] == $getsoal['jawaban']) ? $benar++ : $salah++;
+
+        if ($getjwb['jawaban'] == $getsoal['jawaban']) {
+            // die("benar");
+            // jika benar
+            // bobot soal
+            if ($getsoal['kategori'] == 1) {
+                $skor += 1;
+            } else if ($getsoal['kategori'] == 2) {
+                $skor += 2.3;
+            } else {
+                $skor += 3.5;
+            }
+        } else {
+            if ($arrayjawab[$getsoal['id_soal']] == "X") {
+                // die("Tidak dijawab");
+            } else {
+                // die("salah");
+                if ($getsoal['kategori'] == 1) {
+                    $skor -= 0.13;
+                } else if ($getsoal['kategori'] == 2) {
+                    $skor -= 0.3;
+                } else {
+                    $skor -= 0.67;
+                }
+            }
+        }
     }
     $bagi = $mapel['jml_soal'] / 100;
     $bobot = $mapel['bobot_pg'] / 100;
-    $skor = ($benar / $bagi) * $bobot;
+    // $skor = ($benar / $bagi) * $bobot;
     $data = array(
         'ujian_selesai' => $datetime,
         'jml_benar' => $benar,
@@ -77,9 +111,7 @@ while ($siswa = mysqli_fetch_array($hasil))
     );
     $simpan = update($koneksi, 'nilai', $data, $where);
     if ($simpan) {
-        echo "ID ".$idnilai." Berhasil di proses <br>";
+        echo "ID " . $idnilai . " Berhasil di proses <br>";
     }
     echo mysqli_error($koneksi);
 }
-	
-?>

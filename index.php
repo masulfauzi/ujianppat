@@ -608,6 +608,9 @@ $tglsekarang = time();
                                                                 <tr>
                                                                     <th width='5px'>#</th>
                                                                     <th>Soal PG</th>
+                                                                    <th>Kategori</th>
+                                                                    <th>Jawaban</th>
+                                                                    <th>Poin</th>
 
                                                                     <th style='text-align:center'>Hasil</th>
                                                                 </tr>
@@ -620,13 +623,44 @@ $tglsekarang = time();
                                                                     $soal = mysqli_fetch_array(mysqli_query($koneksi, "SELECT * FROM soal WHERE id_soal='$key'"));
                                                                     if ($value == $soal['jawaban']) :
                                                                         $status = "<span class='text-green'><i class='fa fa-check'></i></span>";
+                                                                        if ($soal['kategori'] == 1) {
+                                                                            $skor = "1";
+                                                                        } else if ($soal['kategori'] == 2) {
+                                                                            $skor = "2.3";
+                                                                        } else {
+                                                                            $skor = "3.5";
+                                                                        }
                                                                     else :
                                                                         $status = "<span class='text-red'><i class='fa fa-times'></i></span>";
+                                                                        if ($soal['kategori'] == 1) {
+                                                                            $skor = "-0.13";
+                                                                        } else if ($soal['kategori'] == 2) {
+                                                                            $skor = "-0.3";
+                                                                        } else {
+                                                                            $skor = "-0.67";
+                                                                        }
                                                                     endif;
                                                                     ?>
                                                                     <tr>
                                                                         <td><?= $no ?></td>
                                                                         <td><?= $soal['soal'] ?></td>
+                                                                        <?php
+                                                                            if($soal['kategori'] == 1)
+                                                                            {
+                                                                                echo "<th>Sangat Mudah</th>";
+                                                                            }
+                                                                            else if($soal['kategori'] == 2)
+                                                                            {
+                                                                                echo "<th>Mudah</th>";
+                                                                            }
+                                                                            else{
+                                                                                echo "<th>Sulit</th>";
+
+                                                                            }
+                                                                        ?>
+
+                                                                        <td><?=$value?></td>
+                                                                        <td><?=$skor?></td>
 
                                                                         <td style='text-align:center'><?= $status ?></td>
                                                                     </tr>

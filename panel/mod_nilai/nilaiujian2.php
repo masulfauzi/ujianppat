@@ -18,15 +18,11 @@ defined('APLIKASI') or exit('Anda tidak dizinkan mengakses langsung script ini!'
         $mapel = mysqli_fetch_array(mysqli_query($koneksi, "SELECT * FROM mapel where id_mapel='$id_mapel' "));
         $kelas = implode("','", unserialize($mapel['kelas']));
         if ($kelas == "semua") {
-	        if($id_kelas != '')
-	        {
-		        $peserta = mysqli_query($koneksi, "SELECT * FROM siswa where id_kelas='$_GET[kelas]'");
-	        }
-	        else
-	        {
-		        $peserta = mysqli_query($koneksi, "SELECT * FROM siswa where level='$mapel[level]'");
-	        }
-            
+            if ($id_kelas != '') {
+                $peserta = mysqli_query($koneksi, "SELECT * FROM siswa where id_kelas='$_GET[kelas]'");
+            } else {
+                $peserta = mysqli_query($koneksi, "SELECT * FROM siswa where level='$mapel[level]'");
+            }
         } else {
             if (empty($_GET['kelas'])) {
                 $peserta = mysqli_query($koneksi, "SELECT * FROM siswa where id_kelas IN ('" . $kelas . "')");
@@ -381,32 +377,7 @@ defined('APLIKASI') or exit('Anda tidak dizinkan mengakses langsung script ini!'
                             </table>
                         <?php } ?>
                         <br>
-                        <!-- <table class='table table-bordered table-striped'>
-							<thead>
-								<tr>
-									<th width='5px'>#</th>
-									<th>Soal Esai</th>
-									<th style='text-align:center'>Hasil</th>
-								</tr>
-							</thead>
-							<tbody>
-								<?php $nilaiex = mysqli_query($koneksi, "SELECT * FROM hasil_jawaban WHERE id_siswa='$id_siswa' and id_mapel='$idmapel' and jenis='2' and id_ujian='$nilai[id_ujian]' ");
-                                $nox = 0; ?>
-								<?php while ($jawabane = mysqli_fetch_array($nilaiex)) : ?>
-									<?php
-                                    $soal = mysqli_fetch_array(mysqli_query($koneksi, "SELECT * FROM soal WHERE id_soal='$jawabane[id_soal]'"));
-                                    $nox++;
-                                    ?>
-									<tr>
-										<td><?= $nox ?></td>
-										<td><?= $soal['soal'] ?>
-											<p><b>jawab : </b><?= $jawabane['esai'] ?></p>
-										</td>
-										<td style='text-align:center'><?= $jawabane['nilai_esai'] ?></td>
-									</tr>
-								<?php endwhile; ?>
-							</tbody>
-						</table> -->
+
                     </div>
                 </div>
             </div>
