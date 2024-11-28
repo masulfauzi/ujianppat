@@ -660,7 +660,18 @@ $tglsekarang = time();
                                                                         ?>
 
                                                                         <td><?=$value?></td>
-                                                                        <td><?=$skor?></td>
+                                                                        <td>
+                                                                            <?php
+                                                                            if($value == 'X')
+                                                                            {
+                                                                                echo "0";
+                                                                            } 
+                                                                            else{
+                                                                                echo $skor;
+                                                                            }
+                                                                            ?>
+                                                                        </td>
+                                                                        
 
                                                                         <td style='text-align:center'><?= $status ?></td>
                                                                     </tr>
