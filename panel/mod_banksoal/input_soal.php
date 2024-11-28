@@ -14,6 +14,22 @@ $soal = mysqli_fetch_array($soalQ);
 ($soal['jawaban'] == 'B') ? $jwbB = 'checked' : $jwbB = '';
 ($soal['jawaban'] == 'C') ? $jwbC = 'checked' : $jwbC = '';
 ($soal['jawaban'] == 'D') ? $jwbD = 'checked' : $jwbD = '';
+if ($soal['kategori'] == 1) {
+	$select1 = "selected";
+} else {
+	$select1 = "";
+}
+if ($soal['kategori'] == 2) {
+	$select2 = "selected";
+} else {
+	$select2 = '';
+}
+if ($soal['kategori'] == 3) {
+	$select3 = "selected";
+} else {
+	$select3 = "";
+}
+
 if ($mapel['opsi'] == 5) {
 	($soal['jawaban'] == 'E') ? $jwbE = 'checked' : $jwbE = '';
 }
@@ -153,9 +169,9 @@ if ($mapel['opsi'] == 5) {
 											</h4>
 											<div class='box-tools pull-right'>
 												<select style="color: black;" class="form-control" name="kategori" id="kategori">
-													<option value="1">Sangat Mudah</option>
-													<option value="2">Mudah</option>
-													<option value="3">Sulit</option>
+													<option <?= $select1 ?> value="1">Sangat Mudah</option>
+													<option <?= $select2 ?> value="2">Mudah</option>
+													<option <?= $select3 ?> value="3">Sulit</option>
 												</select>
 												<!-- <input style="color: black;" type="text" name="bobot" required="true" value="<?= $soal['bobot'] ?>"> -->
 											</div>
